@@ -1,8 +1,8 @@
 # anttweakbar build script
-
 env = Environment()
 
-src_list = Split('''
+# linux only
+atb_src = Split('''
 	TwColors.cpp 
 	TwFonts.cpp 
 	TwOpenGL.cpp 
@@ -26,8 +26,11 @@ env.Append(
 		'-D__PLACEMENT_NEW_LINE'],
 )
 
+atb_lib = env.SharedLibrary('anttweakbar', ['src/'+s for s in atb_src])
 
-anttweakbar_objs = env.Object(['src/' + s for s in src_list])
+atb_target = '/usr/local/lib'
+env.Install(atb_targer, atb_lib)
+env.Alias('install', atb_targer)
 
-env.Library('libanttweakbar.a', anttweakbar_objs)
+# examples
 
