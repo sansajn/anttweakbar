@@ -29,8 +29,11 @@ env.Append(
 atb_lib = env.SharedLibrary('anttweakbar', ['src/'+s for s in atb_src])
 
 atb_target = '/usr/local/lib'
-env.Install(atb_targer, atb_lib)
-env.Alias('install', atb_targer)
+env.Install(atb_target, atb_lib)
+env.Alias('install', atb_target)
 
 # examples
-
+env.Append(LIBS=['m', 'GL', 'GLU', 'glut', atb_lib])
+env.Program('examples/TwSimpleGLUT.c')
+env.Program('examples/TwDualGLUT.c')
+#env.Program('examples/TwString.cpp')
