@@ -1,6 +1,14 @@
 # anttweakbar build script
 env = Environment()
 
+AddOption('--debug-build',	action='store_true',	dest='debug_build',
+	help='debug build', default=False)
+
+if GetOption('debug_build'):
+	env.Append(CCFLAGS=['-g', '-O0'])
+else:
+	env.Append(CCFLAGS=['-Os'])
+
 # linux only
 atb_src = Split('''
 	TwColors.cpp 
@@ -37,3 +45,4 @@ env.Append(LIBS=['m', 'GL', 'GLU', 'glut', atb_lib])
 env.Program('examples/TwSimpleGLUT.c')
 env.Program('examples/TwDualGLUT.c')
 #env.Program('examples/TwString.cpp')
+
