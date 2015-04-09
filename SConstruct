@@ -1,23 +1,20 @@
 # anttweakbar build script
-# 
-# $ scons
-# $ sudo scons install
-# $ sudo ldconfig
-#
 
-AddOption('--debug-build',	action='store_true',	dest='debug_build',
+AddOption('--debug-build', action='store_true', dest='debug_build',
 	help='debug build', default=False)
 
-env = Environment()
-env.ParseConfig('pkg-config --cflags --libs gl glu x11 sdl libglfw')
+tbar_env = Environment()
+tbar_env.ParseConfig('pkg-config --cflags --libs gl glu x11 sdl libglfw')
+
+tbar_env.Append(LIBS=['stdc++'])
 
 if GetOption('debug_build'):
-	env.Append(CCFLAGS=['-g', '-O0'])
+	tbar_env.Append(CCFLAGS=['-g', '-O0'])
 else:
-	env.Append(CCFLAGS=['-Os'])
+	tbar_env.Append(CCFLAGS=['-O2'])
 
 # linux only
-atb_src = Split('''
+tbar_src = Split('''
 	TwColors.cpp 
 	TwFonts.cpp 
 	TwOpenGL.cpp 
@@ -35,27 +32,30 @@ atb_src = Split('''
 	TwEventSFML.cpp 
 	TwEventX11.c''')
 
-env.Append(
+tbar_env.Append(
 	CPPPATH = ['include'],
-	CPPFLAGS = ['-fPIC', '-fno-strict-aliasing', '-D_UNIX',
-		'-D__PLACEMENT_NEW_LINE'],
+	CPPFLAGS = ['-fPIC', '-fno-strict-aliasing', ],
+	CPPDEFINES=['_UNIX', '__PLACEMENT_NEW_LINE'],
 	LIBPATH = '.',
 )
 
-atb_lib = env.SharedLibrary('anttweakbar', ['src/'+s for s in atb_src])
+tbar_full_src = ['src/'+s for s in tbar_src]
 
-atb_target = '/usr/local/lib'
-env.Install(atb_target, atb_lib)
-env.Alias('install', atb_target)
+static_tbar = tbar_env.StaticLibrary('anttweakbar', tbar_full_src)
+shared_tbar = tbar_env.SharedLibrary('anttweakbar', tbar_full_src)
+
+tbar_target = '/usr/local/lib'
+tbar_env.Install(tbar_target, shared_tbar)
+tbar_env.Alias('install', tbar_target)
 
 # examples
-env.Append(LIBS=['m', 'glut'])
-env.Program(['examples/TwSimpleGLUT.c', atb_lib])
-env.Program(['examples/TwDualGLUT.c', atb_lib])
-env.Program(['examples/TwSimpleSDL.c', atb_lib])
-env.Program(['examples/TwSimpleGLFW.c', atb_lib])
-env.Program(['examples/TwAdvanced1.cpp', atb_lib])
-env.Program(['examples/TwString.cpp', atb_lib])
-#env.Program(['examples/TwSimpleSFML.cpp', atb_objs])  # nejede
-#env.Program(['examples/TwGLCoreSDL.c', atb_objs])  # nejede
+tbar_env.Append(LIBS=['m', 'glut'])
+tbar_env.Program(['examples/TwSimpleGLUT.c', static_tbar])
+tbar_env.Program(['examples/TwDualGLUT.c', static_tbar])
+tbar_env.Program(['examples/TwSimpleSDL.c', static_tbar])
+tbar_env.Program(['examples/TwSimpleGLFW.c', static_tbar])
+tbar_env.Program(['examples/TwAdvanced1.cpp', static_tbar])
+tbar_env.Program(['examples/TwString.cpp', static_tbar])
+#tbar_env.Program(['examples/TwSimpleSFML.cpp', static_tbar])  # nejede
+#tbar_env.Program(['examples/TwGLCoreSDL.c', static_tbar])  # nejede
 
