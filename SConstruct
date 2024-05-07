@@ -1,5 +1,5 @@
 # anttweakbar build script
-# dependencies: libsdl1.2-dev libglfw3-dev freglut3-dev
+# dependencies: libsdl1.2-dev libglfw3-dev freeglut3-dev
 # glfw not available in Ubuntu 22.04
 
 AddOption('--debug-build', action='store_true', dest='debug_build',
