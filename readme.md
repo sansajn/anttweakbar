@@ -2,13 +2,21 @@
 
 This is AntTweakBar library fork with scons build tool support.
 
-To build library, run
+To build library,
 
+- install dependencies with
+```bash
+sudo apt install libsdl1.2-dev libglfw3-dev freeglut3-dev
+```
+command
+
+- run
 ```bash
 scons -j8
 ```
+command.
 
-command. AntTweakBar is build as both static (`libanttweakbar.a`) and shared (`libanttweakbar.so`) library.
+AntTweakBar is build as both static (`libanttweakbar.a`) and shared (`libanttweakbar.so`) library.
 
 
 AntTweakBar development library
