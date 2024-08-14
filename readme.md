@@ -18,6 +18,21 @@ command.
 
 AntTweakBar is build as both static (`libanttweakbar.a`) and shared (`libanttweakbar.so`) library.
 
+To install
+
+- run
+```bash
+sudo scons install
+```
+command which install `libanttweakbar.so` into `/usr/local/lib` directory.
+
+- run
+```bash
+sudo ldconfig
+```
+to update linker database.
+
+
 
 AntTweakBar development library
 -------------------------------
